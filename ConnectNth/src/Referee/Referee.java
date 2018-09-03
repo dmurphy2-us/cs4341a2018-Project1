@@ -235,7 +235,7 @@ public class Referee
     public static int checkConnect(StateTree board)
     {
         int winner = 0;
-        int[] count = new int[board.winNumber];
+        int[] count = new int[4];
         int winTotal = 0;
         for(int i=0; i<board.rows; i++)
         {
@@ -244,7 +244,7 @@ public class Referee
                 if(board.getBoardMatrix()[i][j] == 0)
                 {
                     winner = 0;
-                    for(int x=0; x<board.winNumber; x++)
+                    for(int x=0; x<4; x++)
                     {
                         count[x] = 0;
                     }
@@ -272,7 +272,7 @@ public class Referee
                             count[3] = 0;
                     }
                 }
-                for(int x=0; x<board.winNumber; x++)
+                for(int x=0; x<4; x++)
                 {
                     if(count[x] == board.winNumber)
                     {
