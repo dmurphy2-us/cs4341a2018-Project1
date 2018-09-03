@@ -50,17 +50,19 @@ public abstract class Player {
      *Returns: integer representing the calculated heuristic
      */
 
-    public int calculateHeuristic(StateTree board) {
+    public int calculateHeuristic(StateTree board, int playerNumber) {
         int h = -10000;
         int c = 0;
         StateTree tempBoard;
-        int playerNumber;
+        int opponentNumber;
 
-        if (turn % 2 == 0){
+        if (playerNumber == 2){
             playerNumber = 2;
+            opponentNumber = 1;
         }
         else {
             playerNumber = 1;
+            opponentNumber = 2;
         }
 
 
@@ -68,13 +70,73 @@ public abstract class Player {
             tempBoard = board;
             if (board.validMove(new Move(false, i))) {
                 tempBoard.makeMove(new Move(false, i));
-                if (getPlayValue(tempBoard, playerNumber) > h){
+                if (getPlayValue(tempBoard, playerNumber) - getPlayValue(tempBoard, opponentNumber) > h){
                     h = getPlayValue(tempBoard, playerNumber);
                     c = i;
+                }
+                if (getPlayValue(tempBoard, playerNumber)  == -1 || getPlayValue(tempBoard, opponentNumber) == -1){
+                    c = i;
+                    return c;
+                }
+            }
+            tempBoard = board;
+            if (board.validMove(new Move(true, i))) {
+                tempBoard.makeMove(new Move(true, i));
+                if (getPlayValue(tempBoard, playerNumber) - getPlayValue(tempBoard, opponentNumber) > h){
+                    h = getPlayValue(tempBoard, playerNumber);
+                    c = i * -1;
+                }
+                if (getPlayValue(tempBoard, playerNumber)  == -1 || getPlayValue(tempBoard, opponentNumber) == -1){
+                    c = i * -1;
+                    return c;
                 }
             }
         }
         return c;
+    }
+
+    public int getHueristic(StateTree board, int playerNumber) {
+        int h = -10000;
+        int c = 0;
+        StateTree tempBoard;
+        int opponentNumber;
+
+        if (playerNumber == 2){
+            opponentNumber = 1;
+        }
+        else {
+            playerNumber = 1;
+            opponentNumber = 2;
+        }
+
+
+        for (int i = 0; i < board.columns; i++) {
+            tempBoard = board;
+            if (board.validMove(new Move(false, i))) {
+                tempBoard.makeMove(new Move(false, i));
+                if (getPlayValue(tempBoard, playerNumber) - getPlayValue(tempBoard, opponentNumber) > h){
+                    h = getPlayValue(tempBoard, playerNumber);
+                    c = i;
+                }
+                if (getPlayValue(tempBoard, playerNumber)  == -1 || getPlayValue(tempBoard, opponentNumber) == -1){
+                    h = -1;
+                    return h;
+                }
+            }
+            tempBoard = board;
+            if (board.validMove(new Move(true, i))) {
+                tempBoard.makeMove(new Move(true, i));
+                if (getPlayValue(tempBoard, playerNumber) - getPlayValue(tempBoard, opponentNumber) > h){
+                    h = getPlayValue(tempBoard, playerNumber);
+                    c = i * -1;
+                }
+                if (getPlayValue(tempBoard, playerNumber)  == -1 || getPlayValue(tempBoard, opponentNumber) == -1){
+                    h = -1;
+                    return 10000;
+                }
+            }
+        }
+        return h;
     }
 
     /*
@@ -95,28 +157,41 @@ public abstract class Player {
         int diagonal1Value = checkDiagonally1(board, playerNumber);
         int diagonal2Value = checkDiagonally2(board, playerNumber);
             
-        //h = horizontalValue+verticalValue+diagonal1Value+diagonal2Value;
-        h = horizontalValue;
+        h = horizontalValue+verticalValue+diagonal1Value+diagonal2Value;
+
+        if (horizontalValue == -1 || verticalValue == -1 || diagonal1Value == -1 || diagonal2Value == -1){
+            return -1;
+        }
+        //h = horizontalValue;
         return h;
     }
 
 
     public int checkHorizontally(StateTree board, int playerNumber){
         int h = 0;
-        int max = 0;
+        int max;
+        int concurrent;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
 
         for (int j = 0; j < board.rows - 1; j++) {
             max = 0;
+            concurrent = 0;
             for (int i = 0; i < board.columns - 1; i++){
                 if (boardMatrix[i][j] == playerNumber){
                     max++;
+                    concurrent++;
                     if (i == board.columns-1){
                         h = h+max*max;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
@@ -127,20 +202,29 @@ public abstract class Player {
 
     public int checkVertically(StateTree board, int playerNumber){
         int h = 0;
-        int max = 0;
+        int max;
+        int concurrent;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
 
         for (int i = 0; i < board.columns - 1; i++) {
             max = 0;
+            concurrent = 0;
             for (int j = 0; j<board.rows - 1; j++){
                 if (boardMatrix[i][j] == playerNumber){
                     max++;
+                    concurrent++;
                     if (j == board.rows-1){
                         h = h+max*max;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
@@ -151,7 +235,8 @@ public abstract class Player {
 
     public int checkDiagonally2(StateTree board, int playerNumber){
         int h = 0;
-        int max = 0;
+        int max;
+        int concurrent;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
         int x = 0;
@@ -159,15 +244,24 @@ public abstract class Player {
 
         for (int i = 0; i < board.columns - 1; i++){
             x = i;
+            max = 0;
+            concurrent = 0;
             for (int j = 0; j<board.rows - 1; j++){
                 if (boardMatrix[x][j] == playerNumber){
                     max++;
+                    concurrent++;
                     if (x == board.columns-2){
                         h = h+max*max;
                         break;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
@@ -180,15 +274,24 @@ public abstract class Player {
 
         for (int j = 1; j < board.rows - 1; j++){
             y = j;
+            max = 0;
+            concurrent = 0;
             for (int i = 0; i<board.columns - 1; i++){
                 if (boardMatrix[i][y] == playerNumber){
                     max++;
+                    concurrent++;
                     if (y == board.rows-1){
                         h = h+max*max;
                         break;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
@@ -205,6 +308,7 @@ public abstract class Player {
     public int checkDiagonally1(StateTree board, int playerNumber){
         int h = 0;
         int max = 0;
+        int concurrent;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
         int x = 0;
@@ -212,15 +316,24 @@ public abstract class Player {
 
         for (int i = 0; i < board.columns - 1; i++){
             x = i;
+            max = 0;
+            concurrent = 0;
             for (int j = board.rows-1; j>0; j--){
                 if (boardMatrix[x][j] == playerNumber){
                     max++;
+                    concurrent++;
                     if (x == board.columns-2){
                         h = h+max*max;
                         break;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
@@ -233,15 +346,24 @@ public abstract class Player {
 
         for (int j = board.rows -2; j > 0 ; j--){
             y = j;
+            max = 0;
+            concurrent = 0;
             for (int i = 0; i<board.columns - 1; i++){
                 if (boardMatrix[i][y] == playerNumber){
                     max++;
+                    concurrent++;
                     if (y == 1){
                         h = h+max*max;
                         break;
                     }
+                    if (concurrent == N){
+                        return -1;
+                    }
                 }
-                else {
+                if (boardMatrix[i][j] == 0){
+                    concurrent = 0;
+                }
+                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                     h = h+max*max;
                     max = 0;
                 }
