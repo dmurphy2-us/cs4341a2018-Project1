@@ -69,6 +69,7 @@ public abstract class Player {
             if (board.validMove(new Move(false, i))) {
                 tempBoard.makeMove(new Move(false, i));
                 if (getPlayValue(tempBoard, playerNumber) > h){
+                    h = getPlayValue(tempBoard, playerNumber);
                     c = i;
                 }
             }
@@ -88,37 +89,15 @@ public abstract class Player {
      */
     public int getPlayValue(StateTree board, int playerNumber) {
         int h;
-        int opponentH;
-        int heuristicValue;
-        if(playerNumber == 1) {
-        	int horizontalValue  = checkHorizontally(board, playerNumber);
-            int verticalValue  = checkVertically(board, playerNumber);
-            int diagonal1Value = checkDiagonally1(board, playerNumber);
-            int diagonal2Value = checkDiagonally2(board, playerNumber);
-            int opponentHorizontalValue  = checkHorizontally(board, 2);
-            int opponentVerticalValue  = checkVertically(board, 2);
-            int opponentDiagonal1Value = checkDiagonally1(board, 2);
-            int opponentDiagonal2Value = checkDiagonally2(board, 2);
-            
-            h = horizontalValue+verticalValue+diagonal1Value+diagonal2Value;
-            opponentH = opponentHorizontalValue+opponentVerticalValue+opponentDiagonal1Value+opponentDiagonal2Value;
 
-        } else {
-        	int horizontalValue  = checkHorizontally(board, playerNumber);
-            int verticalValue  = checkVertically(board, playerNumber);
-            int diagonal1Value = checkDiagonally1(board, playerNumber);
-            int diagonal2Value = checkDiagonally2(board, playerNumber);
-            int opponentHorizontalValue  = checkHorizontally(board, 1);
-            int opponentVerticalValue  = checkVertically(board, 1);
-            int opponentDiagonal1Value = checkDiagonally1(board, 1);
-            int opponentDiagonal2Value = checkDiagonally2(board, 1);
+        int horizontalValue  = checkHorizontally(board, playerNumber);
+        int verticalValue  = checkVertically(board, playerNumber);
+        int diagonal1Value = checkDiagonally1(board, playerNumber);
+        int diagonal2Value = checkDiagonally2(board, playerNumber);
             
-            h = horizontalValue+verticalValue+diagonal1Value+diagonal2Value;
-            opponentH = opponentHorizontalValue+opponentVerticalValue+opponentDiagonal1Value+opponentDiagonal2Value;
-        }
-        heuristicValue = h - opponentH;
-        
-        return heuristicValue;
+        //h = horizontalValue+verticalValue+diagonal1Value+diagonal2Value;
+        h = horizontalValue;
+        return h;
     }
 
 
