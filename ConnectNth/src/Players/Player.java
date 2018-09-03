@@ -51,7 +51,7 @@ public abstract class Player {
      */
 
     public int calculateHeuristic(StateTree board) {
-        int h = 0;
+        int h = -10000;
         int c = 0;
         StateTree tempBoard;
         int playerNumber;
@@ -128,12 +128,12 @@ public abstract class Player {
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
 
-        for (int i = 0; i < board.rows; i++) {
+        for (int j = 0; j < board.rows - 1; j++) {
             max = 0;
-            for (int j = 0; j<board.columns; j++){
+            for (int i = 0; i < board.columns - 1; i++){
                 if (boardMatrix[i][j] == playerNumber){
                     max++;
-                    if (j == board.columns-1){
+                    if (i == board.columns-1){
                         h = h+max*max;
                     }
                 }
@@ -152,9 +152,9 @@ public abstract class Player {
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
 
-        for (int j = 0; j < board.columns; j++) {
+        for (int i = 0; i < board.columns - 1; i++) {
             max = 0;
-            for (int i = 0; i<board.rows; i++){
+            for (int j = 0; j<board.rows - 1; j++){
                 if (boardMatrix[i][j] == playerNumber){
                     max++;
                     if (j == board.rows-1){
@@ -175,17 +175,16 @@ public abstract class Player {
         int max = 0;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
-        int i = board.rows;
-        int j = board.columns;
+        int x = 0;
+        int y = 0;
 
-        for (int j2 = 0; j2 < board.columns; j2++) {
-            max = 0;
-            for (j = 0; j<board.columns; j++){
-                if (boardMatrix[i][j] == playerNumber){
+        for (int i = 0; i < board.columns - 1; i++){
+            x = i;
+            for (int j = 0; j<board.rows - 1; j++){
+                if (boardMatrix[x][j] == playerNumber){
                     max++;
-                    if (j == board.columns-1 || i == 0){
+                    if (x == board.columns-2){
                         h = h+max*max;
-                        i = board.rows;
                         break;
                     }
                 }
@@ -193,18 +192,20 @@ public abstract class Player {
                     h = h+max*max;
                     max = 0;
                 }
-                i--;
+                if (x == board.columns-2){
+                    break;
+                }
+                x++;
             }
         }
 
-        for (int i2 = 0; i2 < board.rows; i2++) {
-            max = 0;
-            for (i = 0; i<board.rows; i++){
-                if (boardMatrix[i][j] == playerNumber){
+        for (int j = 1; j < board.rows - 1; j++){
+            y = j;
+            for (int i = 0; i<board.columns - 1; i++){
+                if (boardMatrix[i][y] == playerNumber){
                     max++;
-                    if (j == 0 || i == board.rows-1){
+                    if (y == board.rows-1){
                         h = h+max*max;
-                        j = board.columns;
                         break;
                     }
                 }
@@ -212,9 +213,13 @@ public abstract class Player {
                     h = h+max*max;
                     max = 0;
                 }
-                j--;
+                if (y == board.rows-1){
+                    break;
+                }
+                y++;
             }
         }
+
         return h;
     }
 
@@ -223,17 +228,16 @@ public abstract class Player {
         int max = 0;
         int[][] boardMatrix;
         boardMatrix = board.getBoardMatrix();
-        int i = 0;
-        int j = 0;
+        int x = 0;
+        int y = 0;
 
-        for (int j2 = 0; j2 < board.columns; j2++) {
-            max = 0;
-            for (j = 0; j<board.columns; j++){
-                if (boardMatrix[i][j] == playerNumber){
+        for (int i = 0; i < board.columns - 1; i++){
+            x = i;
+            for (int j = board.rows-1; j>0; j--){
+                if (boardMatrix[x][j] == playerNumber){
                     max++;
-                    if (j == board.columns-1 || i == board.rows-1){
+                    if (x == board.columns-2){
                         h = h+max*max;
-                        i = 0;
                         break;
                     }
                 }
@@ -241,18 +245,20 @@ public abstract class Player {
                     h = h+max*max;
                     max = 0;
                 }
-                i++;
+                if (x == board.columns-2){
+                    break;
+                }
+                x++;
             }
         }
 
-        for (int i2 = 0; i2 < board.rows; i2++) {
-            max = 0;
-            for (i = 0; i<board.rows; i++){
-                if (boardMatrix[i][j] == playerNumber){
+        for (int j = board.rows -2; j > 0 ; j--){
+            y = j;
+            for (int i = 0; i<board.columns - 1; i++){
+                if (boardMatrix[i][y] == playerNumber){
                     max++;
-                    if (j == board.columns-1 || i == board.rows-1){
+                    if (y == 1){
                         h = h+max*max;
-                        j = 0;
                         break;
                     }
                 }
@@ -260,9 +266,13 @@ public abstract class Player {
                     h = h+max*max;
                     max = 0;
                 }
-                j++;
+                if (y == 1){
+                    break;
+                }
+                y--;
             }
         }
+
         return h;
     }
 }
