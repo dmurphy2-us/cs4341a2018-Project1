@@ -11,4 +11,6 @@ Considering we were not supposed to alter the Referee or the Utilities classes, 
 
 To test the heuristic was working we hardcoded a board display on each valid move that was made and ensured that the AI did not snake throught the columns as it did when the project framework was handed over.
 
+The Player class to use is simplePlayer1 that we used as a base and modified please use this class to create the player character for our code.
+
 Thanks for your consideration and time. 
