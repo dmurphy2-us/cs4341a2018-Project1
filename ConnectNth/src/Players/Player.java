@@ -178,22 +178,29 @@ public abstract class Player {
             max = 0;
             concurrent = 0;
             for (int i = 0; i < board.columns - 1; i++){
-                if (boardMatrix[i][j] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (i == board.columns-1){
+                try{
+                    if (boardMatrix[i][j] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (i == board.columns-1){
+                            h = h+max*max;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
-                    }
-                    if (concurrent == N){
-                        return -1;
+                        max = 0;
                     }
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
+                    break;
                 }
             }
         }
@@ -211,22 +218,29 @@ public abstract class Player {
             max = 0;
             concurrent = 0;
             for (int j = 0; j<board.rows - 1; j++){
-                if (boardMatrix[i][j] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (j == board.rows-1){
+                try {
+                    if (boardMatrix[i][j] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (j == board.rows-1){
+                            h = h+max*max;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
-                    }
-                    if (concurrent == N){
-                        return -1;
+                        max = 0;
                     }
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
+                    break;
                 }
             }
         }
@@ -247,28 +261,35 @@ public abstract class Player {
             max = 0;
             concurrent = 0;
             for (int j = 0; j<board.rows - 1; j++){
-                if (boardMatrix[x][j] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (x == board.columns-2){
+                try {
+                    if (boardMatrix[x][j] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (x == board.columns-2){
+                            h = h+max*max;
+                            break;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
+                        max = 0;
+                    }
+                    if (x == board.columns-2){
                         break;
                     }
-                    if (concurrent == N){
-                        return -1;
-                    }
+                    x++;
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
-                }
-                if (x == board.columns-2){
                     break;
                 }
-                x++;
             }
         }
 
@@ -277,28 +298,36 @@ public abstract class Player {
             max = 0;
             concurrent = 0;
             for (int i = 0; i<board.columns - 1; i++){
-                if (boardMatrix[i][y] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (y == board.rows-1){
+                try {
+                    if (boardMatrix[i][y] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (y == board.rows-2){
+                            h = h+max*max;
+                            break;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
+                        max = 0;
+                    }
+                    if (y == board.rows-2){
                         break;
                     }
-                    if (concurrent == N){
-                        return -1;
-                    }
+                    y++;
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
-                }
-                if (y == board.rows-1){
                     break;
                 }
-                y++;
+
             }
         }
 
@@ -314,63 +343,80 @@ public abstract class Player {
         int x = 0;
         int y = 0;
 
+
         for (int i = 0; i < board.columns - 1; i++){
             x = i;
             max = 0;
             concurrent = 0;
             for (int j = board.rows-1; j>0; j--){
-                if (boardMatrix[x][j] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (x == board.columns-2){
+                try {
+                    if (boardMatrix[x][j] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (x == board.columns-2){
+                            h = h+max*max;
+                            break;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
+                        max = 0;
+                    }
+                    if (x == board.columns-2){
                         break;
                     }
-                    if (concurrent == N){
-                        return -1;
-                    }
+                    x++;
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
-                }
-                if (x == board.columns-2){
                     break;
                 }
-                x++;
+
             }
         }
 
-        for (int j = board.rows -2; j > 0 ; j--){
+        for (int j = board.rows -2; j > 1 ; j--){
             y = j;
             max = 0;
             concurrent = 0;
             for (int i = 0; i<board.columns - 1; i++){
-                if (boardMatrix[i][y] == playerNumber){
-                    max++;
-                    concurrent++;
-                    if (y == 1){
+                try {
+                    if (boardMatrix[i][y] == playerNumber){
+                        max++;
+                        concurrent++;
+                        if (y == 1){
+                            h = h+max*max;
+                            break;
+                        }
+                        if (concurrent == N){
+                            return -1;
+                        }
+                    }
+                    if (boardMatrix[i][j] == 0){
+                        concurrent = 0;
+                    }
+                    else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
                         h = h+max*max;
+                        max = 0;
+                    }
+                    if (y == 1){
                         break;
                     }
-                    if (concurrent == N){
-                        return -1;
-                    }
+                    y--;
                 }
-                if (boardMatrix[i][j] == 0){
-                    concurrent = 0;
-                }
-                else if (boardMatrix[i][j] != playerNumber && boardMatrix[i][j] != 0){
+                catch (IndexOutOfBoundsException e) {
                     h = h+max*max;
                     max = 0;
-                }
-                if (y == 1){
                     break;
                 }
-                y--;
+
             }
         }
 
