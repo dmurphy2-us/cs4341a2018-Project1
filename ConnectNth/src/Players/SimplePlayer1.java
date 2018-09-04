@@ -39,18 +39,19 @@ public class SimplePlayer1 extends Player
         int h3 = -100000;
         int c = 0;
 
-        for (int i = 0; i < state.columns; i++){
-            if (tempState.validMove(new Move(false, i))) {
-                tempState.makeMove(new Move(false, i));
-                for (int j = 0; j < state.columns; j++){
-                    if (tempState.validMove(new Move(false, j))) {
-                        tempState.makeMove(new Move(false, j));
+        // a set depth 3 minimax search through the possible upcoming board states
+        for (int e = 0; e < state.columns; e++){
+            if (tempState.validMove(new Move(false, e))) {
+                tempState.makeMove(new Move(false, e));
+                for (int f = 0; f < state.columns; f++){
+                    if (tempState.validMove(new Move(false, f))) {
+                        tempState.makeMove(new Move(false, f));
                         h3 = getHueristic(tempState, playerNumber);
                         if (h3 < h2){
                             h2 = h3;
                             if (h2 > h){
                                 h = h2;
-                                c = i;
+                                c = e;
                             }
                         }
                     }
@@ -58,6 +59,7 @@ public class SimplePlayer1 extends Player
             }
         }
 
+        // returns next best move
         return new Move(false, c);
     }
 }

@@ -42,12 +42,12 @@ public abstract class Player {
     // Minimax $ Heuristic
 
     /*
-     *Name: calculateHeuristic(StateTree board)
+     *Name: calculateHeuristic(StateTree board, int playerNumber)
      *Type: private method
      *Description: Analyzes a given board and computes a heuristic based on its current state
      *Parameters:
      *    - board: the StateTree that represents the board
-     *Returns: integer representing the calculated heuristic
+     *Returns: integer representing the column for next best move
      */
 
     public int calculateHeuristic(StateTree board, int playerNumber) {
@@ -95,6 +95,14 @@ public abstract class Player {
         return c;
     }
 
+    /*
+     *Name: getHueristic(StateTree board, int playerNumber)
+     *Type: private method
+     *Description: Analyzes a given board and computes a heuristic based on its current state
+     *Parameters:
+     *    - board: the StateTree that represents the board
+     *Returns: integer representing the calculated heuristic for next best move
+     */
     public int getHueristic(StateTree board, int playerNumber) {
         int h = -10000;
         int c = 0;
@@ -167,6 +175,15 @@ public abstract class Player {
     }
 
 
+    /*
+     * Name: checkHorizontally(StateTree board, int playerNumber)
+     * Type: public method
+     * Description: gets value of all horizontal connections
+     * Parameters:
+     *  - board: The state tree of the current board move being examined
+     * 	- playerNumber: The number of the player whose moves to check for
+     * Returns: An integer that is the heuristic value of the current board state for horizontal pieces
+     */
     public int checkHorizontally(StateTree board, int playerNumber){
         int h = 0;
         int max;
@@ -207,6 +224,15 @@ public abstract class Player {
         return h;
     }
 
+    /*
+     * Name: checkVertically(StateTree board, int playerNumber)
+     * Type: public method
+     * Description: gets value of all Vertical connections
+     * Parameters:
+     *  - board: The state tree of the current board move being examined
+     * 	- playerNumber: The number of the player whose moves to check for
+     * Returns: An integer that is the heuristic value of the current board state for Vertical pieces
+     */
     public int checkVertically(StateTree board, int playerNumber){
         int h = 0;
         int max;
@@ -247,6 +273,15 @@ public abstract class Player {
         return h;
     }
 
+    /*
+     * Name: checkDiagonally2(StateTree board, int playerNumber)
+     * Type: public method
+     * Description: gets value of all Diagonal2 connections (up and to the right)
+     * Parameters:
+     *  - board: The state tree of the current board move being examined
+     * 	- playerNumber: The number of the player whose moves to check for
+     * Returns: An integer that is the heuristic value of the current board state for Diagonal2 pieces (up and to the right)
+     */
     public int checkDiagonally2(StateTree board, int playerNumber){
         int h = 0;
         int max;
@@ -334,6 +369,15 @@ public abstract class Player {
         return h;
     }
 
+    /*
+     * Name: checkDiagonally1(StateTree board, int playerNumber)
+     * Type: public method
+     * Description: gets value of all Diagonal1 connections (down and to the right)
+     * Parameters:
+     *  - board: The state tree of the current board move being examined
+     * 	- playerNumber: The number of the player whose moves to check for
+     * Returns: An integer that is the heuristic value of the current board state for Diagonal1 pieces (down and to the right)
+     */
     public int checkDiagonally1(StateTree board, int playerNumber){
         int h = 0;
         int max = 0;
